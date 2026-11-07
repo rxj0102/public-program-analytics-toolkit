@@ -1,5 +1,7 @@
 # public-program-analytics-toolkit
 
+[![CI](https://github.com/rxj0102/public-program-analytics-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/rxj0102/public-program-analytics-toolkit/actions/workflows/ci.yml)
+
 A Python toolkit that models the research and analysis workflow of a
 **municipal advisory analyst** covering state-run investment programs:
 529 college savings plans, ABLE (disability savings) plans, and
