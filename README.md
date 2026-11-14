@@ -5,30 +5,30 @@
 A Python toolkit that models the research and analysis workflow of a
 **municipal advisory analyst** covering state-run investment programs:
 529 college savings plans, ABLE (disability savings) plans, and
-state-facilitated retirement savings programs (e.g. "Secure Choice"
+state-facilitated retirement savings programs (e.g. *Secure Choice*
 auto-IRA programs).
 
 ## Scenario
 
 Municipal advisory practices that serve state treasurers, program
 managers (recordkeepers), and state boards typically maintain an
-internal "proprietary database" of comparable state programs, which
+internal *proprietary database* of comparable state programs, which
 they use to:
 
-1. **Track the market** -- assets, accounts, fees, and investment
+1. **Track the market**: assets, accounts, fees, and investment
    menus across every comparable state program.
-2. **Model a single program's trajectory** -- project asset and
+2. **Model a single program's trajectory**: project asset and
    account growth under multiple scenarios, and assess whether the
    program can sustain its fixed administrative costs.
-3. **Benchmark a client against peers** -- fees, investment menu
+3. **Benchmark a client against peers**: fees, investment menu
    breadth, and growth rate, with percentile rankings and specific
    competitive gaps.
-4. **Respond to RFPs** -- when a state solicits proposals for program
+4. **Respond to RFPs**: when a state solicits proposals for program
    administration services, pull data-driven talking points straight
    from the database and growth model into a structured response.
-5. **Publish market commentary** -- a data-driven "industry trends"
+5. **Publish market commentary**: a data-driven *industry trends*
    note summarizing growth, fee compression, and notable findings.
-6. **Brief the board** -- a slide-by-slide outline summarizing a
+6. **Brief the board**: a slide-by-slide outline summarizing a
    program's performance, competitive position, and outlook, with
    numbers pulled directly from the underlying models.
 
@@ -41,11 +41,11 @@ database.
 **Every number in this repository is fabricated.** State names are
 real (there are only 50 U.S. states, and using them is part of what
 makes the toolkit realistic), but total assets, account counts, fee
-schedules, inception years, and "program manager" (recordkeeper) names
+schedules, inception years, and *program manager* (recordkeeper) names
 are randomly generated within realistic ranges by
 `program_database.ProgramDatabase.generate_synthetic()`. Program
-manager names (e.g. "Meridian Trust Advisors") are **fictional firms
-invented for this project** -- they do not refer to any real
+manager names (e.g. *Meridian Trust Advisors*) are **fictional firms
+invented for this project**: they do not refer to any real
 recordkeeper, bank, or asset manager, and nothing in this repository
 should be cited as real market data. Generation is seeded
 (`seed=42` by default) so results are reproducible across runs.
@@ -79,8 +79,8 @@ states. Each `ProgramRecord` carries:
 - `total_assets`, `number_of_accounts` (and the derived
   `average_account_balance`)
 - `investment_options`: a list of `InvestmentOption(name, category,
-  expense_ratio_bps)` -- menu breadth and fee structure
-- `state_admin_fee_bps` and `fixed_admin_cost_annual` -- inputs to the
+  expense_ratio_bps)`: menu breadth and fee structure
+- `state_admin_fee_bps` and `fixed_admin_cost_annual`: inputs to the
   sustainability model
 - `history`: 7 trailing fiscal years of assets and accounts, used to
   derive historical growth rates
@@ -96,7 +96,7 @@ lower-cost, index-based investment menus.
 
 `ProgramDatabase` supports `query`, `filter` (by type / state / manager
 / asset range), `peer_group`, `update` (in-place field updates,
-mirroring "refreshing" a database record from a new filing), `add` /
+mirroring *refreshing* a database record from a new filing), `add` /
 `remove`, `summary_statistics`, and JSON `save` / `load`.
 
 ### 2. Growth & sustainability model (`growth_projection.py`)
@@ -114,7 +114,7 @@ three scenarios:
 **Sustainability metric.** Many state programs fund fixed
 administrative overhead (staff, board, marketing, outreach) that isn't
 covered by the recordkeeper's per-account fee, via a small
-basis-point "state administrative fee" assessed on total assets. Given
+basis-point *state administrative fee* assessed on total assets. Given
 `fixed_admin_cost_annual` and `state_admin_fee_bps`, the *average
 account balance a program needs* to fully cover that overhead is:
 
@@ -134,18 +134,18 @@ the program as sustainable or at risk under each growth path.
 of the same type in the database on three metrics: average expense
 ratio, investment menu breadth, and 5-year historical asset CAGR. Each
 metric is converted to a 0-100 **percentile rank**, always oriented so
-that a higher percentile means "more competitively positioned" (even
+that a higher percentile means *more competitively positioned* (even
 though a *lower* raw expense ratio is what's actually better).
 `identify_competitive_gaps()` then translates those percentiles into
-plain-language "gap" / "in-line" / "advantage" findings.
+plain-language *gap* / *in-line* / *advantage* findings.
 
 ### 4. RFP response draft (`rfp_response_draft.py`)
 
 `generate_rfp_response()` takes a synthetic `RFPRequest` (issuing state,
 program type, key requirements, evaluation criteria) and produces the
-five standard sections of an RFP response -- firm background
+five standard sections of an RFP response: firm background
 (placeholder), understanding of program needs, proposed approach,
-relevant experience, and pricing framework -- pulling peer-group
+relevant experience, and pricing framework: pulling peer-group
 medians, the firm's own tracked engagements, and (optionally) a
 reference program's growth projection directly from the database and
 growth model.
@@ -199,12 +199,38 @@ The `tests/` directory contains 30 pytest tests covering:
   formula against hand-computed expected values, and edge cases (a
   zero admin fee, a single historical data point).
 - **Benchmarking percentiles**: `percentile_rank()` against manually
-  computed expected percentiles for both "higher is better" and "lower
-  is better" metrics, plus gap/advantage classification.
+  computed expected percentiles for both *higher is better* and *lower
+  is better* metrics, plus gap/advantage classification.
 - **Generation modules**: structural checks on the RFP response
   sections, the industry report's word count and section headers, and
-  the presentation outline's slide count and numbering -- each
+  the presentation outline's slide count and numbering: each
   verified to actually reflect the underlying data rather than static
   text.
 
 Run `pytest -v` from the repository root to execute the full suite.
+
+## Reproducibility
+
+### Data availability
+
+No external data is downloaded. Inputs are generated or parameterised inside the code.
+
+### Computational requirements
+
+- Python 3.12.3. Every dependency version is pinned in `uv.lock`.
+- Checked on Linux x86_64 with 2 CPU cores and 8 GB RAM. No GPU is needed.
+
+```bash
+pip install uv     # once
+uv sync            # installs the exact pinned environment
+uv run pytest -q   # runs the test suite
+```
+
+### Runtime
+
+The test suite (30 tests) finishes in about 4 seconds on the machine above, including any data downloads it triggers.
+
+### Citation
+
+Citation metadata is in `CITATION.cff`. GitHub turns it into a Cite this repository button on the repo page.
+
