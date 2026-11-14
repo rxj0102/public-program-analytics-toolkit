@@ -208,3 +208,29 @@ The `tests/` directory contains 30 pytest tests covering:
   text.
 
 Run `pytest -v` from the repository root to execute the full suite.
+
+## Reproducibility
+
+### Data availability
+
+No external data is downloaded. Inputs are generated or parameterised inside the code.
+
+### Computational requirements
+
+- Python 3.12.3. Every dependency version is pinned in `uv.lock`.
+- Checked on Linux x86_64 with 2 CPU cores and 8 GB RAM. No GPU is needed.
+
+```bash
+pip install uv     # once
+uv sync            # installs the exact pinned environment
+uv run pytest -q   # runs the test suite
+```
+
+### Runtime
+
+The test suite (30 tests) finishes in about 4 seconds on the machine above, including any data downloads it triggers.
+
+### Citation
+
+Citation metadata is in `CITATION.cff`. GitHub turns it into a Cite this repository button on the repo page.
+
